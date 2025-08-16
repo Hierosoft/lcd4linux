@@ -39,7 +39,7 @@ AC_ARG_WITH(
   [                        Newhaven, Noritake, NULL, Pertelian, PHAnderson,]
   [                        PICGraphic, picoLCD, picoLCDGraphic, PNG, PPM, RouterBoard,]
   [                        Sample, SamsungSPF, serdisplib, ShuttleVFD, SimpleLCD, st2205, T6963,]
-  [                        TeakLCM, Trefon, ULA200, USBHUB, USBLCD, VNC, WincorNixdorf, X11],
+  [                        TeakLCM, Trefon, ULA200, USB2VFD, USBHUB, USBLCD, VNC, WincorNixdorf, X11],
   drivers=$withval,
   drivers=all
 )
@@ -111,6 +111,7 @@ for driver in $drivers; do
          TeakLCM="yes"
          Trefon="yes"
          ULA200="yes"
+         USB2VFD="yes"
 	 USBHUB="yes"
          USBLCD="yes"
          VNC="yes"
@@ -269,6 +270,9 @@ for driver in $drivers; do
          ;;
       ULA200)
          ULA200=$val
+         ;;
+      USB2VFD)
+         USB2VFD=$val
          ;;
       USBHUB)
          USBHUB=$val
@@ -832,6 +836,13 @@ if test "$ULA200" = "yes"; then
    else
       AC_MSG_WARN(ftdi.h not found: ULA200 driver disabled)
    fi
+fi
+
+if test "$USB2VFD" = "yes"; then
+   TEXT="yes"
+   SERIAL="yes"
+   DRIVERS="$DRIVERS drv_USB2VFD.o"
+   AC_DEFINE(WITH_USB2VFD,1,[USB2VFD driver])
 fi
 
 if test "$USBHUB" = "yes"; then
