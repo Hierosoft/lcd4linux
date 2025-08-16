@@ -62,6 +62,7 @@ extern DRIVER drv_FW8888;
 extern DRIVER drv_G15;
 extern DRIVER drv_GLCD2USB;
 extern DRIVER drv_HD44780;
+extern DRIVER drv_IL9341;
 extern DRIVER drv_Image;
 extern DRIVER drv_IRLCD;
 extern DRIVER drv_LCD2USB;
@@ -157,6 +158,9 @@ DRIVER *Driver[] = {
 #endif
 #if (defined(WITH_PNG) && defined(WITH_GD)) || defined(WITH_PPM)
     &drv_Image,
+#endif
+#ifdef WITH_IL9341
+    &drv_IL9341,
 #endif
 #ifdef WITH_IRLCD
     &drv_IRLCD,

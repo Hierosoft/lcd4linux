@@ -34,7 +34,7 @@ AC_ARG_WITH(
   [                        possible drivers are:]
   [                        ASTUSB, BeckmannEgle, BWCT, CrystalFontz, Curses, Cwlinux, D4D, DPF]
   [                        EA232graphic, EFN, FutabaVFD, FW8888, G15, GLCD2USB, HD44780, HD44780-I2C,]
-  [                        IRLCD, LCD2USB, LCDLinux, LEDMatrix, LCDTerm, LPH7508, LUIse,]
+  [                        IL9341, IRLCD, LCD2USB, LCDLinux, LEDMatrix, LCDTerm, LPH7508, LUIse,]
   [                        LW_ABP, M50530, MatrixOrbital, MatrixOrbitalGX, MilfordInstruments, MDM166A,]
   [                        Newhaven, Noritake, NULL, Pertelian, PHAnderson,]
   [                        PICGraphic, picoLCD, picoLCDGraphic, PNG, PPM, RouterBoard,]
@@ -76,6 +76,7 @@ for driver in $drivers; do
          GLCD2USB="yes"
          HD44780="yes"
          HD44780_I2C="yes"
+		 IL9341="yes"
 	 IRLCD="yes"
          LCD2USB="yes"
 	 LCDLINUX="yes"
@@ -164,6 +165,9 @@ for driver in $drivers; do
       HD44780-I2C)
          HD44780_I2C=$val
 	 ;;
+      IL9341)
+         IL9341=$val
+         ;;
       IRLCD)
          IRLCD=$val
          ;;
@@ -466,6 +470,17 @@ if test "$HD44780" = "yes"; then
    else
       HD44780="no"
       AC_MSG_WARN(HD44780-i2c enabled disabling HD44780)
+   fi
+fi
+
+if test "$IL9341" = "yes"; then
+   if test "$has_usb" = "true"; then
+      GRAPHIC="yes"
+      DRIVERS="$DRIVERS drv_IL9341.o"
+      LIBUSB="yes"
+      AC_DEFINE(WITH_IL9341,1,[IL9341 driver])
+   else
+      AC_MSG_WARN(usb.h not found: IL9341 driver disabled)
    fi
 fi
 

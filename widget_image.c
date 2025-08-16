@@ -102,7 +102,22 @@ static void widget_image_render(const char *Name, WIDGET_IMAGE * Image)
 	    return;
 	}
 
-	fd = fopen(file, "rb");
+	if(P2N(&Image->sequence) >=0)
+	{
+		size_t needed = snprintf(NULL, 0, file, Image->seqnum) + 1;
+		char  *buffer = malloc(needed);
+		sprintf(buffer, file, Image->seqnum);
+		fd = fopen(buffer, "rb");
+		free(buffer);
+		Image->seqnum++;
+		if (Image->seqnum > P2N(&Image->sequence))
+			Image->seqnum=0;
+	}
+	else
+	{
+		fd = fopen(file, "rb");
+	}
+
 	if (fd == NULL) {
 	    error("Warning: Image %s: fopen(%s) failed: %s", Name, file, strerror(errno));
 	    return;
@@ -183,6 +198,7 @@ void widget_image_update(void *Self)
 	property_eval(&Image->reload);
 	property_eval(&Image->visible);
 	property_eval(&Image->inverted);
+	property_eval(&Image->sequence);
 
 	/* render image into bitmap */
 	widget_image_render(W->name, Image);
@@ -222,6 +238,7 @@ int widget_image_init(WIDGET * Self)
 	Image->width = 0;
 	Image->height = 0;
 	Image->bitmap = NULL;
+	Image->seqnum = 0;
 
 	/* load properties */
 	property_load(section, "file", NULL, &Image->file);
@@ -229,6 +246,7 @@ int widget_image_init(WIDGET * Self)
 	property_load(section, "reload", "0", &Image->reload);
 	property_load(section, "visible", "1", &Image->visible);
 	property_load(section, "inverted", "0", &Image->inverted);
+	property_load(section, "sequence", "-1", &Image->sequence);
 
 	/* sanity checks */
 	if (!property_valid(&Image->file)) {
@@ -271,6 +289,7 @@ int widget_image_quit(WIDGET * Self)
 		property_free(&Image->reload);
 		property_free(&Image->visible);
 		property_free(&Image->inverted);
+		property_free(&Image->sequence);
 		free(Self->data);
 		Self->data = NULL;
 	    }

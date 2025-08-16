@@ -88,6 +88,7 @@ drv_G15.c                     \
 drv_GLCD2USB.c glcd2usb.h     \
 drv_HD44780.c                 \
 drv_Image.c                   \
+drv_IL9341.c                  \
 drv_IRLCD.c                   \
 drv_LCD2USB.c                 \
 drv_LCDLinux.c                \
