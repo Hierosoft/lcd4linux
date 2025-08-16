@@ -55,7 +55,7 @@ static void pyt_exec_str(RESULT * result, const char *module, const char *functi
     const char *rv = NULL;
     int i;
 
-    pName = PyString_FromString(module);
+    pName = PyUnicode_FromString(module);
     /* Error checking of pName left out */
 
     pModule = PyImport_Import(pName);
@@ -71,7 +71,7 @@ static void pyt_exec_str(RESULT * result, const char *module, const char *functi
 	if (pFunc && PyCallable_Check(pFunc)) {
 	    pArgs = PyTuple_New(argc);
 	    for (i = 0; i < argc; ++i) {
-		pValue = PyString_FromString(argv[i]);
+		pValue = PyUnicode_FromString(argv[i]);
 		if (!pValue) {
 		    Py_DECREF(pArgs);
 		    Py_DECREF(pModule);
@@ -85,7 +85,7 @@ static void pyt_exec_str(RESULT * result, const char *module, const char *functi
 	    pValue = PyObject_CallObject(pFunc, pArgs);
 	    Py_DECREF(pArgs);
 	    if (pValue != NULL) {
-		rv = PyString_AsString(pValue);
+		rv = PyUnicode_AsUTF8(pValue);
 		SetResult(&result, R_STRING, rv);
 		Py_DECREF(pValue);
 		/* rv is now a 'dangling reference' */
