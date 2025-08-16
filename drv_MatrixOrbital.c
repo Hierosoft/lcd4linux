@@ -1,5 +1,5 @@
-/* $Id$
- * $URL$
+/* $Id: drv_MatrixOrbital.c 1150 2011-07-27 02:53:04Z michael $
+ * $URL: https://ssl.bulix.org/svn/lcd4linux/trunk/drv_MatrixOrbital.c $
  *
  * new style driver for Matrix Orbital serial display modules
  *
@@ -88,10 +88,11 @@ static MODEL Models[] = {
     {0x0d, "VFD4021", 2, 40, 0, 1, 1},
     {0x0e, "VK202-25", 2, 20, 0, 1, 1},
     {0x0f, "VK204-25", 4, 20, 0, 1, 1},
-    {0x10, "GLC12232", -1, -1, 0, 1, 1},
-    {0x13, "GLC24064", -1, -1, 0, 1, 1},
-    {0x15, "GLK24064-25", -1, -1, 0, 1, 1},
-    {0x22, "GLK12232-25", -1, -1, 0, 1, 1},
+    {0x10, "GLC12232", 32, 122, 0, 1, 1},
+    {0x13, "GLC24064", 64, 240, 0, 1, 1},
+    {0x15, "GLK24064-25", 64, 240, 0, 1, 1},
+    {0x22, "GLK12232-25", 32, 122, 0, 1, 1},
+    {0x24, "GLK12232-25-SM", 32, 122, 0, 1, 1},
     {0x31, "LK404-AT", 4, 40, 8, 8, 2},
     {0x32, "VFD1621", 2, 16, 0, 1, 1},
     {0x33, "LK402-12", 2, 40, 8, 8, 2},
@@ -508,7 +509,7 @@ int drv_MO_init(const char *section, const int quiet)
     int ret;
     int asc255bug;
 
-    info("%s: %s", Name, "$Rev$");
+    info("%s: %s", Name, "$Rev: 1150 $");
 
     /* display preferences */
     XRES = 5;			/* pixel width of one char  */
