@@ -110,6 +110,29 @@ int drv_generic_i2c_pre_write(int dev)
     return 0;
 }
 
+int drv_mcp23017_i2c_pre_write(int dev)
+{
+
+    info("%s: selecting slave device 0x%x", Driver, dev);
+    if (ioctl(i2c_device, I2C_SLAVE, dev) < 0) {
+        error("%s: error selecting slave device 0x%x\n", Driver, dev);
+        return -EPIPE;
+    }
+
+    info("%s: initializing I2C slave device 0x%x for output", Driver, dev);
+    if (i2c_smbus_write_byte_data(i2c_device, 0x00, 0x00) < 0) {
+        error("%s: error initializing device PortA 0x%x\n", Driver, dev);
+        close(i2c_device);
+    }
+    if (i2c_smbus_write_byte_data(i2c_device, 0x01, 0x00) < 0) {
+        error("%s: error initializing device PortB 0x%x\n", Driver, dev);
+        close(i2c_device);
+    }
+
+    return 0;
+}
+
+
 int drv_generic_i2c_open(const char *section, const char *driver)
 {
     char *bus, *device;
@@ -119,7 +142,7 @@ int drv_generic_i2c_open(const char *section, const char *driver)
     bus = cfg_get(Section, "Port", NULL);
     device = cfg_get(Section, "Device", NULL);
     ctrldev = atoi(device);
-    device = cfg_get(Section, "DDevice", NULL);
+    device = cfg_get(Section, "Device", NULL);
     datadev = atoi(device);
 
     info("%s: initializing I2C bus %s", Driver, bus);
@@ -129,11 +152,11 @@ int drv_generic_i2c_open(const char *section, const char *driver)
     }
 
     if (datadev) {
-	if (drv_generic_i2c_pre_write(datadev) < 0)
+	if (drv_mcp23017_i2c_pre_write(datadev) < 0)
 	    goto exit_error;
     }
 
-    if (drv_generic_i2c_pre_write(ctrldev) < 0)
+    if (drv_mcp23017_i2c_pre_write(ctrldev) < 0)
 	goto exit_error;
 
     return 0;
@@ -196,8 +219,9 @@ static void i2c_out(int dev, unsigned char val)
 	error("%s: error selecting slave device 0x%x\n", Driver, dev);
 	return;
     }
-
+    
     i2c_smbus_write_byte_data(i2c_device, 1, val);
+
 }
 
 void drv_generic_i2c_command(const unsigned char command, /*const */ unsigned char *data, const unsigned char length,
@@ -214,5 +238,28 @@ void drv_generic_i2c_command(const unsigned char command, /*const */ unsigned ch
 	/* unset enable pin including optional rs and rw */
 	i2c_out(ctrldev, command);
     }
+
+}
+void drv_mcp23017_i2c_command(const unsigned char enable, const unsigned char command, const unsigned char data) {
+
+    info("mcp23017 command 0x%x - data %x", command, data);
+
+    i2c_mcp23017_out(0x13,data, datadev);
+    i2c_mcp23017_out(0x12,command | enable, ctrldev);
+    i2c_mcp23017_out(0x12,command, ctrldev);
+
+    //info("mcp23017_i2c_command enable: 0x%x, command: 0x%x, data: 0x%x",enable, command, data);
+}
+
+void i2c_mcp23017_out(const unsigned char reg, const unsigned char byte, int dev) {
+
+    //info("%s: initializing I2C slave device 0x%x", Driver, dev);
+    if (ioctl(i2c_device, I2C_SLAVE, dev) < 0) {
+        error("%s: error selecting slave device 0x%x\n", Driver, dev);
+        return;
+    }
+
+    info("mcp23017_out Port: 0x%x, data: 0x%x", reg, byte);
+    i2c_smbus_write_byte_data(i2c_device, reg, byte);
 
 }

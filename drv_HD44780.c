@@ -756,8 +756,8 @@ static void drv_HD_I2C(unsigned char controller, unsigned char byte, int rs, int
 	data_block[0] = byte;
 	data_block[1] = enable;
     }
-
-    drv_generic_i2c_command(command, data_block, 2, Bits);
+    drv_mcp23017_i2c_command(enable, command, byte);
+    //drv_generic_i2c_command(command, data_block, 2, Bits);
 }
 
 

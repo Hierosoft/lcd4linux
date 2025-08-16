@@ -1,0 +1,8 @@
+Makefile
+config.log
+automate.cache/
+.deps/
+autom4te.cache/
+config.status
+*.o
+lcd4linux

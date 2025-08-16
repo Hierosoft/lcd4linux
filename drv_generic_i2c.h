@@ -59,5 +59,7 @@ void drv_generic_i2c_byte(const unsigned char data);
 void drv_generic_i2c_data(const unsigned char data);
 void drv_generic_i2c_command(const unsigned char command, /*const */ unsigned char *data, const unsigned char length,
 			     int bits);
+void drv_mcp23017_i2c_command(const unsigned char enable, const unsigned char command,
+                             const unsigned char data);
 
 #endif
