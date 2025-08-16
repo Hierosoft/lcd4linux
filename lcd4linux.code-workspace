@@ -4,5 +4,51 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"cSpell.words": [
+			"Altmann",
+			"applnk",
+			"Athlon",
+			"Battwarning",
+			"BogoMips",
+			"Carsten",
+			"Celeron",
+			"CrystalFontz",
+			"econds",
+			"Egle",
+			"gettimeofday",
+			"halfground",
+			"htdocs",
+			"ifdef",
+			"ISDN",
+			"KDEDIR",
+			"kdelnk",
+			"lcdproc",
+			"libgd",
+			"libz",
+			"ltoetsch",
+			"Newsrc",
+			"newsservers",
+			"niced",
+			"nntp",
+			"parports",
+			"pixelgap",
+			"pixelsize",
+			"pixmap",
+			"ppdev",
+			"reinelt",
+			"Rosmanith",
+			"rrggbb",
+			"s",
+			"seti",
+			"Toetsch",
+			"UDELAY",
+			"usec",
+			"usermode",
+			"workunit",
+			"XLCD",
+			"xres",
+			"yres"
+		]
+	}
 }

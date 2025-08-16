@@ -1,7 +1,4 @@
-#
-# $Id: README.Plugins,v 1.2 2004/06/01 06:04:25 reinelt Exp $
-#
-
+# Plugins
 
 This file contains instructions for writing plugins to lcd4linux.
 
@@ -21,3 +18,4 @@ This file contains instructions for writing plugins to lcd4linux.
 - send me a patch (or check in if you have developer CVS access)
 - enjoy
 
+#$Id: README.Plugins,v 1.2 2004/06/01 06:04:25 reinelt Exp $

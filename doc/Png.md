@@ -1,6 +1,4 @@
-#
-# $Id: README.Png,v 1.1 2001/03/02 18:06:18 reinelt Exp $
-#
+# Png
 
 This is the README file for the Png display driver for lcd4linux.
 
@@ -45,3 +43,5 @@ Note: depending on your webervers configuration, you must rename nph-png to
    nph-png.pl or npg-png.cgi.
 
 Have fun.
+
+#$Id: README.Png,v 1.1 2001/03/02 18:06:18 reinelt Exp $

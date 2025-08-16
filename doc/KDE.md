@@ -1,6 +1,4 @@
-#
-# $Id * $URL$
-#
+# KDE
 
 This is the README file for the KDE integration of lcd4linux
 
@@ -16,10 +14,10 @@ be adopted to your needs.
 
 The KDE panel windows must have a size of 45x45 pixels. We get this size by
 using a size of 6x5 characters, each character has 6x8 pixels. By using
-a horizontal gap of 1 pixel between characters, we get a size of 
+a horizontal gap of 1 pixel between characters, we get a size of
 
-horizontal: 6 chars * 6 pixels + 5 gaps = 41 pixels
-vertical:   5 chars * 8 pixels          = 40 pixels
+* horizontal: 6 chars * 6 pixels + 5 gaps = 41 pixels
+* vertical:   5 chars * 8 pixels          = 40 pixels
 
 With a border size of 2 pixels this gives a size of 45 x 44 pixels. Great!
 
@@ -28,7 +26,7 @@ network receive+transmit, ISDN in+out), but you use any other combination you
 like.
 
 
-INSTALLATION:
+## Installation
 
 * download and compile lcd4linux
 * edit lcd4linux.kdelnk and copy to $KDEDIR/share/applnk/apps/System
