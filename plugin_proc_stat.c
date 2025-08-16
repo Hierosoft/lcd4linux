@@ -5,6 +5,7 @@
  *
  * Copyright (C) 2003 Michael Reinelt <michael@reinelt.co.at>
  * Copyright (C) 2004 The LCD4Linux Team <lcd4linux-devel@users.sourceforge.net>
+ * Copyright (C) 2016 Alexei Gordeev <kp1533tm2@gmail.com>
  *
  * This file is part of LCD4Linux.
  *
@@ -362,11 +363,77 @@ static void my_disk(RESULT * result, RESULT * arg1, RESULT * arg2, RESULT * arg3
 }
 
 
+#ifndef __MAC_OS_X_VERSION_10_3
+/* function similar to proc_stat::cpu that allows to access any particular cpu 
+ * syntax: proc_stat::core(core, key, delay)
+ * Keys are the same, just like in proc_stat::cpu
+ */
+static void my_core(RESULT * result, RESULT * arg1, RESULT * arg2, RESULT * arg3)
+{
+    char *key;
+    int delay;
+    unsigned int core;
+
+    if (parse_proc_stat() < 0) {
+        SetResult(&result, R_STRING, "");
+        return;
+    }
+    
+    core = (unsigned int)R2N(arg1);
+    key = R2S(arg2);
+    delay = R2N(arg3);
+
+    /* Since keys from documentation do no match those in hash, I have to hold 2 sets of them 
+     * here. */
+    char *keys[] = { "user", "nice", "system", "idle", "iow", "irq", "sirq" };
+    char *user_keys[] = {"user", "nice", "system", "idle", "iowait", "irq", "softirq" };	
+    char key_buffer[32];
+    double req_value;
+    int key_found = 0;
+
+    double cpu_idle = 0.0;
+    double cpu_total = 0.0;
+
+    /* calculate cpu_total and fetch required argument */
+    for (int i = 0; i < 7; i++) {
+        /* form hash string to request value from hash, like "cpu0.user" */
+        qprintf(key_buffer, sizeof(key_buffer), "cpu%u.%s", core, keys[i]);
+        double value = hash_get_delta(&Stat, key_buffer, NULL, delay);
+        cpu_total += value;			// calculate cpu total time
+        if(!key_found && (strcasecmp(key, user_keys[i]) == 0))
+        {
+            req_value = value;		// grab value if it matches the requested key
+            key_found = 1;			// and set flag
+        }
+        if(strcasecmp(keys[i], "idle") == 0)
+            cpu_idle = value;		// grab cpu idle time anyway
+    }
+    /* If key wasn't found and flag wasn't set, then maybe
+     * user wants "busy", which requires extra step (below),
+     * or maybe it's just gibberish (in which case return 0). */
+    if (!key_found && (strcasecmp(key, "busy") == 0))
+        req_value = cpu_total - cpu_idle;
+    else
+        req_value = 0.0;
+
+    if (cpu_total > 0.0)
+        req_value = 100 * req_value / cpu_total;
+    else
+        req_value = 0.0;
+
+    SetResult(&result, R_NUMBER, &req_value);
+}
+#endif
+
+
 int plugin_init_proc_stat(void)
 {
     hash_create(&Stat);
     AddFunction("proc_stat", -1, my_proc_stat);
     AddFunction("proc_stat::cpu", 2, my_cpu);
+#ifndef __MAC_OS_X_VERSION_10_3
+    AddFunction("proc_stat::core", 3, my_core);		// N/A on MacOS X 10.3
+#endif
     AddFunction("proc_stat::disk", 3, my_disk);
     return 0;
 }
