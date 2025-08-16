@@ -86,7 +86,8 @@ static event_t *events = NULL;
 static int event_count = 0;
 static void free_events(void);
 
-int event_add(void (*callback) (event_flags_t flags, void *data), void *data, const int fd, const int read,
+int event_add(void (*callback) (event_flags_t flags, void *data), void *data,
+	      const int fd, const int read,
 	      const int write, const int active)
 {
     event_count++;
@@ -136,6 +137,7 @@ int event_process(const struct timespec *timeout)
 		continue;
 	    }
 	    if (fds[j].revents) {
+	        debug("fd=%d revents", fds[j].fd);
 		int flags = 0;
 		if (fds[j].revents & POLLIN) {
 		    flags |= EVENT_READ;

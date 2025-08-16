@@ -57,6 +57,7 @@
 #include <dmalloc.h>
 #endif
 
+#define DEFAULT_CONFIGFILE SYSCONFDIR "/lcd4linux.conf"
 #define PIDFILE "/var/run/lcd4linux.pid"
 
 static char *release = "LCD4Linux " VERSION "-" SVN_VERSION;
@@ -85,7 +86,7 @@ static void usage(void)
     printf("  -c <key>=<value> overwrite entries from the config-file\n");
     printf("  -i               enter interactive mode (after display initialisation)\n");
     printf("  -ii              enter interactive mode (before display initialisation)\n");
-    printf("  -f <config-file> use configuration from <config-file> instead of /etc/lcd4linux.conf\n");
+    printf("  -f <config-file> use configuration from <config-file> instead of " DEFAULT_CONFIGFILE "\n");
     printf("  -v               generate info messages\n");
     printf("  -vv              generate debugging messages\n");
     printf("  -p <pid-file>    specify a different pid-file location (default is /var/run/lcd4linux.pid)\n");
@@ -207,7 +208,7 @@ static void daemonize(void)
 
 int main(int argc, char *argv[])
 {
-    char *cfg = "/etc/lcd4linux.conf";
+    char *cfg = DEFAULT_CONFIGFILE;
     char *pidfile = PIDFILE;
     char *display, *driver, *layout;
     char section[32];

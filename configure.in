@@ -28,10 +28,12 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 AC_PREREQ(2.59)
-AC_INIT([LCD4Linux],[0.11.0-SVN],[lcd4linux-users@lists.sourceforge.net])
+AC_INIT([LCD4Linux],[0.11.0-SVN],[lcd4linux-users@lists.sourceforge.net],[lcd4linux])
 AC_CONFIG_SRCDIR([lcd4linux.c])
-AM_INIT_AUTOMAKE([lcd4linux],0.11.0-SVN)
+AM_INIT_AUTOMAKE([0.11.0 gnu])
 AM_CONFIG_HEADER(config.h)
+AC_CONFIG_MACRO_DIR([m4])
+LT_INIT
 
 # Checks for programs.
 AC_PROG_CC
@@ -106,10 +108,10 @@ fi
 AC_CHECK_HEADERS([asm/io.h] [linux/parport.h linux/ppdev.h], [has_parport="true"], [has_parport="false"])
 
 # drivers
-sinclude(drivers.m4)
+sinclude([drivers.m4])
 
 # plugins
-sinclude(plugins.m4)
+sinclude([plugins.m4])
 
 # Checks for header files.
 AC_HEADER_DIRENT
@@ -152,7 +154,9 @@ AC_CHECK_FUNCS([dup2 floor gethostbyname gettimeofday memmove memset pow putenv 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
 
-AC_MSG_RESULT(
+dnl XXX should not use AC_MSG_RESULT after AC_OUTPUT; right?
+cat<<EOF
+dnl AC_MSG_RESULT(
 [-----------------------------------------]
 [including drivers:]
 [  $DRIVERS]
@@ -161,6 +165,4 @@ AC_MSG_RESULT(
 [  $PLUGINS]
 [-----------------------------------------]
 )
-
-AC_CONFIG_MACRO_DIR([m4])
-LT_INIT
+EOF

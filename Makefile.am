@@ -3,15 +3,13 @@
 
 # Process this file with automake to produce Makefile.in
 
-AUTOMAKE_OPTIONS = gnu
 CLEANFILES = *~
-DRIVERS=@DRIVERS@
-PLUGINS=@PLUGINS@
 
 bin_PROGRAMS = lcd4linux
 
 # Fixme: -W should be renamed to -Wextra someday...
 AM_CFLAGS = -D_GNU_SOURCE -Wall -Wextra -fno-strict-aliasing
+AM_CFLAGS += -DSYSCONFDIR='"$(sysconfdir)"'
 
 LIBTOOL=libtool
 ACLOCAL_AMFLAGS=-I m4
@@ -19,8 +17,8 @@ ACLOCAL_AMFLAGS=-I m4
 #AM_CFLAGS = -D_GNU_SOURCE -std=c99 -m64 -Wall -W -pedantic -Wno-variadic-macros -fno-strict-aliasing
 
 lcd4linux_LDFLAGS =
-lcd4linux_LDADD   = @DRIVERS@ @PLUGINS@ @DRVLIBS@ @PLUGINLIBS@
-lcd4linux_DEPENDENCIES = @DRIVERS@ @PLUGINS@
+lcd4linux_LDADD   = $(DRIVERS) $(PLUGINS) $(DRVLIBS) $(PLUGINLIBS)
+lcd4linux_DEPENDENCIES = $(DRIVERS) $(PLUGINS)
 
 lcd4linux_SOURCES =           \
 lcd4linux.c   svn_version.h   \
@@ -111,6 +109,7 @@ drv_serdisplib.c              \
 drv_ShuttleVFD.c              \
 drv_SimpleLCD.c               \
 drv_T6963.c                   \
+drv_TeakLCM.c                 \
 drv_Trefon.c                  \
 drv_ula200.c                  \
 drv_USBHUB.c                  \

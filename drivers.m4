@@ -39,7 +39,7 @@ AC_ARG_WITH(
   [                        MilfordInstruments, Noritake, NULL, Pertelian, PHAnderson,]
   [                        PICGraphic, picoLCD, picoLCDGraphic, PNG, PPM, RouterBoard,]
   [                        Sample, serdisplib, ShuttleVFD, SimpleLCD, st2205, T6963,]
-  [                        Trefon, ULA200, USBHUB, USBLCD, VNC, WincorNixdorf, X11],
+  [                        TeakLCM, Trefon, ULA200, USBHUB, USBLCD, VNC, WincorNixdorf, X11],
   drivers=$withval,
   drivers=all
 )
@@ -102,6 +102,7 @@ for driver in $drivers; do
 	 SHUTTLEVFD="yes"
          SIMPLELCD="yes"
          T6963="yes"
+         TeakLCM="yes"
          Trefon="yes"
          ULA200="yes"
 	 USBHUB="yes"
@@ -235,6 +236,9 @@ for driver in $drivers; do
          ;;
       T6963)
          T6963=$val
+         ;;
+      TeakLCM)
+         TeakLCM=$val
          ;;
       Trefon)
          Trefon=$val
@@ -707,6 +711,15 @@ if test "$T6963" = "yes"; then
    else
       AC_MSG_WARN(asm/io.h or {linux/parport.h and linux/ppdev.h} not found: T6963 driver disabled)
    fi
+fi
+
+if test "x$TeakLCM" = "xyes"; then
+   TEXT="yes"
+   GRAPHIC="no"
+   GPIO="no"
+   SERIAL="yes"
+   DRIVERS="$DRIVERS drv_TeakLCM.o"
+   AC_DEFINE([WITH_TEAK_LCM], [1], [Teak LCM driver])
 fi
 
 if test "$Trefon" = "yes"; then
